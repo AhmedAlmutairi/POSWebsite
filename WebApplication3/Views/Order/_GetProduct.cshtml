@@ -1,0 +1,90 @@
+﻿@model WebApplication3.ViewModel.CategoryAndProduct
+
+
+
+<style>
+    .container {
+        position: relative;
+        width: 50%;
+        
+        
+    }
+
+    .image {
+        opacity: 1;
+        display: block;
+        width: 100%;
+        height: auto;
+        transition: .5s ease;
+        backface-visibility: hidden;
+    }
+
+    .middle {
+        background: rgb(0, 0, 0);
+        background: rgba(0, 0, 0, 0.5);
+        color: #f1f1f1;
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+   
+    a:hover .middle {
+        opacity: 1;
+    }
+
+    .text {
+        
+        color: white;
+        font-size: 16px;
+        padding: 16px 32px;
+    }
+    
+
+    .content3 {
+        height: 100%;
+        width: 60%;
+        position: fixed;
+        z-index: 1; /* Stay on top */
+        top: 15%; /* Stay at the top */
+        left: 40%;
+        padding-bottom: 10%;
+        background-color: #f1f1f1; /* Black */
+        overflow: scroll;
+        padding-top: 10px;
+        float: left;
+    }
+</style>
+
+
+<div class="content3">
+    @foreach (var it in Model.products)
+            {
+                var base64 = Convert.ToBase64String(it.Image);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        <div style="float: left;">
+            <div class="container">
+                <a href="#" id ="@it.Id" onclick="myFunction(this.id)" class="myProduct" >
+                    <img src="@imgSrc" width="150" height="150">
+                    <div class="middle">
+                        <div class="text">
+                            <b>Name: </b><productname id="@it.Name">@it.Name</productname> <br />
+                            <b>Price: </b><productprice id="@it.Price">@it.Price</productprice>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
+    }            
+</div>
+
+             
+
+

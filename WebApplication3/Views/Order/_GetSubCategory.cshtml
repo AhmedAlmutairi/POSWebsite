@@ -1,0 +1,96 @@
+﻿@model WebApplication3.ViewModel.CategoryAndProduct
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/OrederIndexPage.css" rel="stylesheet" />
+<style>
+    
+    .content2 {
+        height: auto;
+        width: 60%;
+        position: fixed;
+        z-index: 1; /* Stay on top */
+        top: 10.8%; /* Stay at the top */
+        left: 40%;
+        background-color: #f1f1f1; /* Black */
+        overflow-y: hidden; /* Disable horizontal scroll */
+        padding-top: 0px;
+    }
+
+    
+</style>
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(function () {
+        $('.subcategory').click(function () {
+            var id = $(this).data('id');
+
+            $.ajax({
+                url: "/Order/GetProduct",
+                data: { data: id },
+                success: function (mydata) {
+                    //alert("success");
+                    $('#linkk').html(mydata);
+                },
+                error: function (mydata) { alert("error"); alert(mydata); },
+                type: 'GET'
+            });
+            return false;
+        });
+    });
+
+</script>
+<!--
+  <div class="panel panel-body">
+    <div class="col-lg-8">
+        
+        
+            <div class="container-fluid">
+                <div class="btn-group">
+                    @foreach (var item in Model.subCategories)
+                    {
+
+
+                        <button type="button" data-id="@item.Id" class="btn btn-primary subcategory">@item.Name</button>
+
+
+
+
+
+
+                    }
+
+                </div>
+            </div>
+
+            
+
+        </div>
+        
+    
+    <div id="linkk">
+
+    </div>
+
+</div>
+  
+-->
+<div class="panel panel-body">
+    <div class="content2">
+        <div class="btn-group">
+            @foreach (var item in Model.subCategories)
+            {
+                <button type="button" data-id="@item.Id" class="btn btn-primary subcategory">@item.Name</button>
+            }
+        </div>
+        <div id="linkk">
+
+        </div>
+    </div>
+    
+</div>
+
+
+
