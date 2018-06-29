@@ -59,6 +59,11 @@
         padding-top: 10px;
         float: left;
     }
+
+    .position {
+        //position: center;
+        //left: 0%;
+    }
 </style>
 
 
@@ -69,7 +74,9 @@
                 var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
         <div style="float: left;">
             <div class="container">
-                <a href="#" id ="@it.Id" onclick="myFunction(this.id)" class="myProduct" >
+                <!--<a href="#" id ="@it.Id" onclick="myFunction(this.id)" class="myProduct" >-->
+                <!--<a href="#" data-toggle="modal" data-target="#mymodal" >-->
+                <a href="#" id="@it.Id" onclick="init(this.id)" data-toggle="modal" data-target="#mymodal" class="myProduct">
                     <img src="@imgSrc" width="150" height="150">
                     <div class="middle">
                         <div class="text">
@@ -80,11 +87,12 @@
                 </a>
             </div>
         </div>
-
-
-    }            
+        
+    }
+    
 </div>
 
-             
+    
+     
 
 

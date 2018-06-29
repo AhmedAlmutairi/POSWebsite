@@ -21,6 +21,23 @@
 
     
 </style>
+
+
+<div class="panel panel-body">
+    <div class="content2">
+        <div class="btn-group">
+            @foreach (var item in Model.subCategories)
+            {
+                <button type="button" data-id="@item.Id" class="btn btn-primary subcategory">@item.Name</button>
+            }
+        </div>
+        <div id="linkk">
+
+        </div>
+    </div>
+    
+</div>
+
 <script language="javascript" type="text/javascript">
 
     $(document).ready(function () {
@@ -42,55 +59,4 @@
     });
 
 </script>
-<!--
-  <div class="panel panel-body">
-    <div class="col-lg-8">
-        
-        
-            <div class="container-fluid">
-                <div class="btn-group">
-                    @foreach (var item in Model.subCategories)
-                    {
-
-
-                        <button type="button" data-id="@item.Id" class="btn btn-primary subcategory">@item.Name</button>
-
-
-
-
-
-
-                    }
-
-                </div>
-            </div>
-
-            
-
-        </div>
-        
-    
-    <div id="linkk">
-
-    </div>
-
-</div>
-  
--->
-<div class="panel panel-body">
-    <div class="content2">
-        <div class="btn-group">
-            @foreach (var item in Model.subCategories)
-            {
-                <button type="button" data-id="@item.Id" class="btn btn-primary subcategory">@item.Name</button>
-            }
-        </div>
-        <div id="linkk">
-
-        </div>
-    </div>
-    
-</div>
-
-
 

@@ -75,6 +75,20 @@
         background-color: Highlight;
     }
 
+    .modal-dialog {
+        position: absolute;
+        top: 50px;
+        right: 100px;
+        bottom: 0;
+        left: 0;
+        z-index: 10040;
+        overflow: auto;
+        overflow-y: auto;
+    }
+
+    .modal-header{
+        background-color:aliceblue;
+    }
 </style>
 
 
@@ -124,7 +138,29 @@
 
         </div>
 
-           <b id="ah">ahmed</b>
+        <div class="modal fade" id="mymodal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a herf="#" class="close" data-dismiss="modal">&times;</a>
+                        <h3 class="modal-title">Quantity/Size</h3>
+                        
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" name="productId" id="productId" value="" />
+                        <p>Please enter the Quantity or size of selected item:</p>
+                        <input type="text" name="quantity" id="quantity" value="" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" value="Submit" onclick="myFunction()" data-dismiss="modal">Submit</button>
+                        <button type="submit" class="btn btn-danger" value="Submit" data-dismiss="modal">Cancle</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -147,29 +183,22 @@
             return false;
         });
     });
+
+    function init(e) {
+        var myProductId = e;//$(this).data('id');
+        $(".modal-body #productId").val(myProductId);
+    }
+
     var items = [];
-    function myFunction(e) {
-        //e.preventDefault();
+    function myFunction() {
+        var id = $('#productId').val().trim();
         
-        var id = e;
-        //var p = " ";
-        //var data = @@Html.Raw(JsonConvert.SerializeObject(this.Model.products));
-        //var x = document.querySelector('productname').id;
-        //var pname = $('#ah').val().trim();
-        //alert(x);
-        //var price = data.price.
         data = { id: id };
 
 
         $.get('/Order/GetData', // url
             data, // parameters for action
             function (response) { // success callback
-                // response has the same properties as the server returnedObject
-                //alert(JSON.stringify(response));
-                //alert(JSON.stringify(response.Price));
-                //alert(p);
-                //var obj = JSON.parse(response);
-                //alert(obj);
                 n = response[0].Name;
                 p = response[0].Price;
                 items.push({
@@ -186,12 +215,7 @@
             'json' // dataType
             
         );
-        //console.log(items.length);
-        
-        //console.log(items);
-        //alert(n);
-        //alert(p);
-        //GeneratedInvoice(items);
+        $('#quantity').val('');
 
     }
     
@@ -201,10 +225,6 @@
         var $table = $('<table/>');
         $table.append('<thead><tr><th>PrductId</th>  <th>ProductName</th>  <th>Price</th></tr></thead>');
         var $tbody = $('<tbody/>');
-        //alert("i am out");
-        //if (items.length > 0) {
-        //   console.log(items);
-        // }
         $.each(items, function (i, val) {
 
             var $row = $('<tr/>');
@@ -217,5 +237,8 @@
         console.log("current", items);
         $table.append($tbody);
         $('#invoice').html($table);
+        
     }
+
+    
 </script>
