@@ -48,6 +48,63 @@ namespace WebApplication3.Controllers
             return Json(returnedData, JsonRequestBehavior.AllowGet);
         }
 
+        //This will save the order and order details 
+        [HttpPost]
+        public JsonResult SaveOrder(CategoryAndProduct cp)
+        {
+            bool status = false;
+            using (RotanaContext dc = new RotanaContext())
+            {
+                
+                Order order = new Order
+                {
+                    UserId = cp.UserId,
+                    OrderDate = cp.OrderDate,
+                    CustomerName = cp.CustomerName,
+                    Address = cp.Address,
+                    City = cp.City,
+                    PhoneNumber = cp.PhoneNumber
+
+                };
+                foreach(var i in cp.OrderProducts)
+                {
+                    /*OrderProduct orderp = new OrderProduct
+                    {
+                        OrderId = i.OrderId,
+                        ProductId = i.ProductId,
+                        ProductName = i.ProductName,
+                        UnitPrice = i.UnitPrice,
+                        UnitQuantity = i.UnitQuantity
+                        
+                    };
+                    dc.OrderProducts.Add(orderp);
+                    dc.SaveChanges();*/
+                    order.OrderProducts.Add(i);
+                }
+                dc.Orders.Add(order);
+                dc.SaveChanges();
+                /*int id =  order.Id;
+                foreach (var i in cp.OrderProducts)
+                {
+                    OrderProduct orderp = new OrderProduct
+                    {
+                        OrderId = order.Id,
+                        ProductId = i.ProductId,
+                        ProductName = i.ProductName,
+                        UnitPrice = i.UnitPrice,
+                        UnitQuantity = i.UnitQuantity
+                        
+                    };
+                    dc.OrderProducts.Add(orderp);
+                    dc.SaveChanges();
+                    
+                }*/
+                status = true;
+            }
+
+            return new JsonResult { Data = new { status = status } };
+        }
+
 
     }
 }

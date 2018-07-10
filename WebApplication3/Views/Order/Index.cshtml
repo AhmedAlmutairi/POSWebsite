@@ -89,6 +89,33 @@
     .modal-header{
         background-color:aliceblue;
     }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: white;
+    }
+
+    span.error{
+        display: block;
+        visibility: hidden;
+        color:red;
+        font-size:90%;
+    }
+
+    .sidenav button {
+        position: absolute;
+        bottom: 120px;
+        width: 100%;
+    }
 </style>
 
 
@@ -99,6 +126,9 @@
 
                 <div id="invoice">
 
+                </div>
+                <div class="btnorder">
+                    <button type="submit" data-toggle="modal" data-target="#myorder" class="btn btn-primary btn-lg btn-block">تنفيد العملية</button>
                 </div>
                 
             </div>
@@ -150,10 +180,43 @@
                     <div class="modal-body">
                         <input type="hidden" name="productId" id="productId" value="" />
                         <p>Please enter the Quantity or size of selected item:</p>
-                        <input type="text" name="quantity" id="quantity" value="" />
+                        <input type="text" id="quantity"/>
+                        <span class="error">Quantity is required, Please enter the quantity</span>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" value="Submit" onclick="myFunction()" data-dismiss="modal">Submit</button>
+                        <button type="submit" id="btnsubmit" class="btn btn-success" value="Submit" onclick="myFunction()" data-dismiss="modal">Submit</button>
+                        <button type="submit" class="btn btn-danger" value="Submit" data-dismiss="modal">Cancle</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="myorder">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a herf="#" class="close" data-dismiss="modal">&times;</a>
+                        <h3 class="modal-title">معلومات العميل</h3>
+
+                    </div>
+
+                    <div class="modal-body">
+                        <p>رقم العميل:</p>
+                        <input type="text" name="UserIdId" id="UserId" value="" />
+                        <p>اسم العميل</p>
+                        <input type="text" id="customerName" />
+                        <span class="error">Quantity is required, Please enter the quantity</span>
+                        <p>العنوان</p>
+                        <input type="text" id="address" />
+                        <p>المدينة</p>
+                        <input type="text" id="city" />
+                        <p>رقم الجوال</p>
+                        <input type="text" id="phoneNo" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="btnsubmit" class="btn btn-success" value="Submit" onclick="saveOrder()" data-dismiss="modal">Submit</button>
                         <button type="submit" class="btn btn-danger" value="Submit" data-dismiss="modal">Cancle</button>
                     </div>
                 </div>
@@ -183,62 +246,106 @@
             return false;
         });
     });
-
-    function init(e) {
-        var myProductId = e;//$(this).data('id');
-        $(".modal-body #productId").val(myProductId);
-    }
-
-    var items = [];
-    function myFunction() {
-        var id = $('#productId').val().trim();
-        
-        data = { id: id };
-
-
-        $.get('/Order/GetData', // url
-            data, // parameters for action
-            function (response) { // success callback
-                n = response[0].Name;
-                p = response[0].Price;
-                items.push({
-                    ProductId: id,
-                    ProductName: n,
-                    UnitPrice: p
-                    //UnitQuantity: $('#UnitQuantity').val().trim()
-
-                });
-                GeneratedInvoice(items);
-                //console.log(items.length);
-
-            },
-            'json' // dataType
-            
-        );
-        $('#quantity').val('');
-
-    }
     
-    function GeneratedInvoice(items) {
+        function init(e) {
+            var myProductId = e;//$(this).data('id');
+            $(".modal-body #productId").val(myProductId);
+        }
 
-        console.log(Object.keys(items).length);
-        var $table = $('<table/>');
-        $table.append('<thead><tr><th>PrductId</th>  <th>ProductName</th>  <th>Price</th></tr></thead>');
-        var $tbody = $('<tbody/>');
-        $.each(items, function (i, val) {
+        var items = [];
+        function myFunction() {
+            var id = $('#productId').val().trim();
+            var quantity = parseInt($('#quantity').val().trim());
+            var isValid = true;
+            data = { id: id };
+            if (!(quantity != '' && !isNaN(quantity))) {
+                isValid = false;
+                $('#quantity').siblings('span.error').css('visibility', 'visible');
+                alert("error, please enter the quantity");
 
-            var $row = $('<tr/>');
-            $row.append($('<td/>').html(val.ProductId));
+            } else {
+                $('#quantity').siblings('span.error').css('visibility', 'hidden');
+            }
+            if (isValid) {
 
-            $row.append($('<td/>').html(val.ProductName));
-            $row.append($('<td/>').html(val.UnitPrice));
-            $tbody.append($row);
-        });
-        console.log("current", items);
-        $table.append($tbody);
-        $('#invoice').html($table);
-        
-    }
+                $.get('/Order/GetData', // url
+                    data, // parameters for action
+                    function (response) { // success callback
+                        n = response[0].Name;
+                        p = response[0].Price;
+                        items.push({
+                            ProductId: id,
+                            ProductName: n,
+                            UnitQuantity: quantity,
+                            UnitPrice: p
 
+
+                        });
+                        //alert(UnitQuantity);
+                        GeneratedInvoice(items);
+                        //console.log(items.length);
+
+                    },
+                    'json' // dataType
+
+                );
+            }
+            $('#quantity').val('');
+
+        }
+        function saveOrder() {
+            console.log(items);
+             
+           var data = {
+                UserId: $('#UserId').val().trim(),
+                OrderDate: '02/02/2018',
+                CustomerName: $('#customerName').val().trim(),
+                Address: $('#address').val().trim(),
+                City: $('#city').val().trim(),
+                PhoneNumber: $('#phoneNo').val().trim(),
+                OrderProducts: items
+            }
+            $(this).val('Please wait....');
+
+            $.ajax({
+                url: "/Order/SaveOrder",
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "JSON",
+                contentType: "application/json",
+                success: function (d) {
+                    if (d.status == true) {
+                        alert('successfully done');
+                        items = [];
+                        $('#invoice').empty();
+                    } else {
+                        alert('Failed');
+                    }
+                }
+
+            });
+        }
+
+        function GeneratedInvoice(items) {
+
+            console.log(Object.keys(items).length);
+            var $table = $('<table/>');
+            $table.append('<thead><tr><th>PrductId</th>  <th>ProductName</th> <th>Quantity</th>  <th>Price</th></tr></thead>');
+            var $tbody = $('<tbody/>');
+            $.each(items, function (i, val) {
+
+                var $row = $('<tr/>');
+                $row.append($('<td/>').html(val.ProductId));
+                $row.append($('<td/>').html(val.ProductName));
+                $row.append($('<td/>').html(val.UnitQuantity));
+                $row.append($('<td/>').html(val.UnitPrice));
+                $tbody.append($row);
+            });
+            console.log("current", items);
+            $table.append($tbody);
+            $('#invoice').html($table);
+
+        }
+    
     
 </script>

@@ -1,0 +1,26 @@
+﻿body {
+}
+
+.login-bg {
+    background-image: url('push-your-con-to-the-world-e1388089147779.jpg');
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#loginForm{
+    //background-color: black;
+    position:relative;
+    color:white;
+    text-align:center;
+    width: 450px;
+    height: 500px;
+    left:50%;
+    right:50%;
+    bottom:50%;
+    border:solid;
+    
+}
+
+#title{
+    font-family:'Segoe Script';
+}
